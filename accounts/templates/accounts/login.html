@@ -1,0 +1,17 @@
+{% extends 'films/base.html' %}
+
+{% block title %}Вход - TochkaFilms{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="auth-form">
+        <h1>Вход</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">Войти</button>
+        </form>
+        <p>Нет аккаунта? <a href="{% url 'accounts:register' %}">Зарегистрируйтесь</a></p>
+    </div>
+</div>
+{% endblock %}
