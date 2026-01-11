@@ -1,0 +1,3806 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #141414 100%);
+    color: #fff;
+    line-height: 1.7;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    overflow-x: hidden;
+    animation: fadeIn 0.8s ease-out;
+    font-feature-settings: 'liga' 1, 'kern' 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Floating particles background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 80%, rgba(229, 9, 20, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(229, 9, 20, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+    animation: floatingBg 20s ease-in-out infinite;
+}
+
+@keyframes floatingBg {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(1deg); }
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Navbar with glassmorphism */
+.navbar {
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    animation: slideDown 0.6s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.navbar:hover {
+    background: rgba(0, 0, 0, 0.95);
+    box-shadow: 0 8px 32px rgba(229, 9, 20, 0.2);
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: 'Orbitron', 'Exo 2', monospace;
+    font-size: 32px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #e50914 0%, #ff6b35 50%, #ffd700 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: logoGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes logoGlow {
+    0% {
+        filter: drop-shadow(0 0 5px rgba(229, 9, 20, 0.3));
+    }
+    100% {
+        filter: drop-shadow(0 0 15px rgba(229, 9, 20, 0.6));
+    }
+}
+
+.logo::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #e50914, #ff6b35, #ffd700);
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+.logo:hover::after {
+    width: 100%;
+}
+
+.logo:hover {
+    transform: scale(1.08) translateY(-2px);
+    filter: drop-shadow(0 0 25px rgba(229, 9, 20, 0.8));
+    background: linear-gradient(135deg, #ff6b35 0%, #ffd700 50%, #e50914 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Logo image styles removed - using text only */
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-links a::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(229, 9, 20, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.nav-links a:hover::before {
+    left: 100%;
+}
+
+.nav-links a:hover {
+    color: #e50914;
+    background: rgba(229, 9, 20, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(229, 9, 20, 0.3);
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, rgba(229, 9, 20, 0.8) 0%, rgba(131, 16, 16, 0.8) 100%), 
+                url('/static/images/hero-bg.jpg') center/cover;
+    padding: 80px 0;
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 20px;
+    opacity: 0.9;
+}
+
+/* Sections */
+section {
+    margin: 50px 0;
+}
+
+section h2 {
+    font-size: 28px;
+    margin-bottom: 25px;
+    padding-left: 20px;
+}
+
+/* Film Grid */
+.film-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 0 20px;
+}
+
+/* Modern Film Cards with Advanced Animations */
+.film-card {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    background: linear-gradient(145deg, #1f1f1f 0%, #2a2a2a 100%);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    animation: cardSlideUp 0.6s ease-out;
+    animation-fill-mode: both;
+}
+
+@keyframes cardSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Stagger animation for multiple cards */
+.film-card:nth-child(1) { animation-delay: 0.1s; }
+.film-card:nth-child(2) { animation-delay: 0.2s; }
+.film-card:nth-child(3) { animation-delay: 0.3s; }
+.film-card:nth-child(4) { animation-delay: 0.4s; }
+.film-card:nth-child(5) { animation-delay: 0.5s; }
+.film-card:nth-child(6) { animation-delay: 0.6s; }
+
+.film-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(229, 9, 20, 0.1) 0%, rgba(255, 107, 107, 0.05) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.film-card:hover {
+    transform: translateY(-15px) scale(1.05);
+    box-shadow: 0 20px 40px rgba(229, 9, 20, 0.2), 0 0 30px rgba(229, 9, 20, 0.1);
+    z-index: 100;
+}
+
+.film-card:hover::before {
+    opacity: 1;
+}
+
+.film-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    transition: all 0.4s ease;
+    filter: brightness(0.9);
+}
+
+.film-card:hover img {
+    transform: scale(1.1);
+    filter: brightness(1.1) contrast(1.1);
+}
+
+.no-poster {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #333 0%, #1a1a1a 100%);
+    padding: 20px;
+    text-align: center;
+}
+
+.film-info {
+    padding: 20px;
+    position: relative;
+    z-index: 2;
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+}
+
+.film-card:hover .film-info {
+    transform: translateY(-5px);
+}
+
+.film-info h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.film-card:hover .film-info h3 {
+    color: #e50914;
+    transform: translateX(5px);
+}
+
+.film-info p {
+    font-size: 14px;
+    color: #ccc;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+}
+
+.film-card:hover .film-info p {
+    color: #fff;
+}
+
+.film-card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+}
+
+/* Rating stars animation */
+.rating-stars {
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.film-card:hover .rating-stars {
+    transform: scale(1.1);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* Categories */
+.category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 0 20px;
+}
+
+.category-tag {
+    background-color: #333;
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: #fff;
+    transition: background-color 0.3s;
+}
+
+.category-tag:hover {
+    background-color: #e50914;
+}
+
+/* Film Detail */
+.film-detail {
+    padding: 40px 0;
+}
+
+.film-header {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.film-poster img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.film-meta h1 {
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+.film-stats {
+    color: #999;
+    margin-bottom: 15px;
+}
+
+.categories {
+    margin: 15px 0;
+}
+
+.description {
+    margin: 20px 0;
+    line-height: 1.8;
+}
+
+.actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+/* Modern Animated Buttons */
+.btn {
+    background: linear-gradient(135deg, #e50914 0%, #ff1744 100%);
+    color: #fff;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 4px 15px rgba(229, 9, 20, 0.3);
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, #ff1744 0%, #e50914 100%);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(229, 9, 20, 0.4);
+}
+
+.btn:active {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 4px 15px rgba(229, 9, 20, 0.3);
+}
+
+/* Button variants */
+.btn-secondary {
+    background: linear-gradient(135deg, #666 0%, #777 100%);
+    box-shadow: 0 4px 15px rgba(102, 102, 102, 0.3);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #777 0%, #888 100%);
+    box-shadow: 0 8px 25px rgba(102, 102, 102, 0.4);
+}
+
+.btn-small {
+    padding: 8px 20px;
+    font-size: 12px;
+    border-radius: 25px;
+}
+
+/* Reviews */
+.reviews-section {
+    margin-top: 50px;
+}
+
+.review-form {
+    background-color: #1f1f1f;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.review-form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.review-form select,
+.review-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #333;
+    border: 1px solid #555;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.review-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.review {
+    background-color: #1f1f1f;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.rating {
+    color: #ffd700;
+}
+
+/* Search Form */
+.search-form {
+    display: flex;
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.search-form input {
+    flex: 1;
+    padding: 12px;
+    background-color: #333;
+    border: 1px solid #555;
+    color: #fff;
+    border-radius: 5px;
+}
+
+/* Auth Forms */
+.auth-form {
+    max-width: 400px;
+    margin: 50px auto;
+    background-color: #1f1f1f;
+    padding: 40px;
+    border-radius: 8px;
+}
+
+.auth-form h1 {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.auth-form form p {
+    margin-bottom: 20px;
+}
+
+.auth-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    border: 1px solid #555;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.auth-form button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.auth-form p:last-child {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.auth-form a {
+    color: #e50914;
+}
+
+/* Messages */
+.messages {
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.message {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.message.success {
+    background-color: #28a745;
+}
+
+.message.error {
+    background-color: #dc3545;
+}
+
+/* Footer */
+footer {
+    background-color: #000;
+    padding: 30px 0;
+    margin-top: 80px;
+    text-align: center;
+    color: #999;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .film-header {
+        grid-template-columns: 1fr;
+    }
+    
+    .film-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    
+    .nav-links {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+/* Category Icons */
+.category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 0 20px;
+}
+
+.category-tag {
+    background-color: #333;
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: #fff;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.category-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.category-tag:hover {
+    background-color: #e50914;
+    transform: translateY(-2px);
+}
+
+/* Film Card Improvements */
+.film-card {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background-color: #1f1f1f;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.film-card:hover {
+    transform: scale(1.05) translateY(-5px);
+    z-index: 10;
+    box-shadow: 0 8px 25px rgba(229, 9, 20, 0.3);
+}
+
+.film-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 0%, rgba(229, 9, 20, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1;
+}
+
+.film-card:hover::before {
+    opacity: 1;
+}
+
+/* Loading Animation */
+.film-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.film-card:hover img {
+    transform: scale(1.1);
+}
+
+/* Featured Badge */
+.featured-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(45deg, #e50914, #ff6b35);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 2;
+}
+
+/* Rating Stars */
+.rating-stars {
+    color: #ffd700;
+    font-size: 14px;
+}
+/* Trailer Section */
+.trailer-section {
+    margin: 40px 0;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    border-radius: 12px;
+    padding: 30px;
+    border: 2px solid #e50914;
+    position: relative;
+}
+
+.trailer-section::before {
+    content: "🇷🇺 Русская озвучка";
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: linear-gradient(45deg, #0066cc, #4285f4);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.trailer-section h2 {
+    color: #e50914;
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.trailer-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.trailer-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Platform indicators */
+.vk-trailer .trailer-section::before {
+    content: "🇷🇺 VK Video";
+    background: linear-gradient(45deg, #4680c2, #5a9bd4);
+}
+
+.rutube-trailer .trailer-section::before {
+    content: "🇷🇺 Rutube";
+    background: linear-gradient(45deg, #ff6b35, #f7931e);
+}
+
+/* Play Button Overlay */
+.play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(229, 9, 20, 0.9);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 3;
+}
+
+.play-overlay:hover {
+    background: rgba(229, 9, 20, 1);
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.play-overlay::before {
+    content: "▶";
+    color: white;
+    font-size: 24px;
+    margin-left: 3px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .trailer-section {
+        padding: 20px;
+        margin: 20px 0;
+    }
+    
+    .trailer-container {
+        padding-bottom: 75%; /* More square on mobile */
+    }
+}
+/* Trailer Info */
+.trailer-info {
+    margin-top: 15px;
+    text-align: center;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+}
+
+.trailer-info p {
+    color: #cccccc;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Russian platform badges on cards */
+.russian-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: linear-gradient(45deg, #0066cc, #4285f4);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.vk-badge {
+    background: linear-gradient(45deg, #4680c2, #5a9bd4);
+}
+
+.rutube-badge {
+    background: linear-gradient(45deg, #ff6b35, #f7931e);
+}
+/* Top Films Styles */
+.top-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin: 40px 0;
+}
+
+.top-section h2 {
+    color: #e50914;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.top-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.top-item {
+    display: flex;
+    align-items: center;
+    background: #1f1f1f;
+    border-radius: 8px;
+    padding: 15px;
+    transition: transform 0.3s;
+}
+
+.top-item:hover {
+    transform: translateX(5px);
+    background: #2a2a2a;
+}
+
+.top-number {
+    font-size: 36px;
+    font-weight: bold;
+    color: #e50914;
+    margin-right: 15px;
+    min-width: 50px;
+}
+
+.top-poster {
+    width: 60px;
+    height: 90px;
+    margin-right: 15px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.top-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.top-info {
+    flex: 1;
+}
+
+.top-info h3 {
+    margin: 0 0 5px 0;
+    font-size: 18px;
+}
+
+.top-info h3 a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.top-info h3 a:hover {
+    color: #e50914;
+}
+
+.top-description {
+    color: #999;
+    font-size: 14px;
+    margin: 5px 0 0 0;
+}
+
+.category-tops {
+    margin-top: 50px;
+}
+
+.category-top {
+    margin-bottom: 40px;
+}
+
+.category-top h3 {
+    color: #e50914;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+/* Filter Styles */
+.filter-form {
+    background: #1f1f1f;
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.filters {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.filter-row {
+    display: flex;
+    gap: 20px;
+    align-items: end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.filter-group label {
+    color: #ccc;
+    font-size: 14px;
+}
+
+.filter-group input,
+.filter-group select {
+    padding: 8px 12px;
+    background: #333;
+    border: 1px solid #555;
+    color: #fff;
+    border-radius: 4px;
+    min-width: 120px;
+}
+
+.btn-secondary {
+    background: #666;
+    margin-left: 10px;
+}
+
+.btn-secondary:hover {
+    background: #777;
+}
+
+.results-info {
+    margin-bottom: 20px;
+    color: #ccc;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 40px 0;
+}
+
+.pagination a {
+    padding: 8px 16px;
+    background: #333;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.pagination a:hover {
+    background: #e50914;
+}
+
+.current-page {
+    padding: 8px 16px;
+    background: #e50914;
+    color: #fff;
+    border-radius: 4px;
+}
+
+/* History and Notifications */
+.history-item,
+.notification-item {
+    display: flex;
+    align-items: center;
+    background: #1f1f1f;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: background 0.3s;
+}
+
+.history-item:hover,
+.notification-item:hover {
+    background: #2a2a2a;
+}
+
+.history-poster,
+.notification-icon {
+    width: 50px;
+    height: 75px;
+    margin-right: 15px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.history-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.notification-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e50914;
+    font-size: 24px;
+}
+
+.history-info,
+.notification-info {
+    flex: 1;
+}
+
+.history-date,
+.notification-date {
+    color: #999;
+    font-size: 12px;
+}
+
+.notification-unread {
+    border-left: 4px solid #e50914;
+}
+
+/* Notifications Badge */
+.notifications-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #e50914;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-item {
+    position: relative;
+}
+
+/* Similar Films Section */
+.similar-films {
+    margin-top: 50px;
+}
+
+.similar-films h2 {
+    color: #e50914;
+    margin-bottom: 25px;
+}
+
+/* Recommended Section */
+.recommended-section {
+    margin: 50px 0;
+}
+
+.recommended-section h2 {
+    color: #e50914;
+    margin-bottom: 25px;
+}
+
+/* Recent Viewed Section */
+.recent-viewed {
+    margin: 50px 0;
+}
+
+.recent-viewed h2 {
+    color: #e50914;
+    margin-bottom: 25px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .top-sections {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .top-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .top-poster {
+        margin: 0 auto 10px auto;
+    }
+}
+/* Search Improvements */
+.search-results-header {
+    margin-bottom: 30px;
+}
+
+.results-count {
+    color: #999;
+    margin-top: 10px;
+}
+
+.no-results {
+    text-align: center;
+    padding: 50px 20px;
+    background: #1f1f1f;
+    border-radius: 8px;
+    margin-top: 30px;
+}
+
+.no-results-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.no-results h3 {
+    color: #e50914;
+    margin-bottom: 20px;
+}
+
+.no-results ul {
+    text-align: left;
+    display: inline-block;
+    margin: 20px 0;
+}
+
+.no-results li {
+    margin-bottom: 8px;
+    color: #ccc;
+}
+
+.search-suggestions {
+    margin-top: 30px;
+}
+
+.suggestion-link, .example-link {
+    display: inline-block;
+    background: #333;
+    color: #fff;
+    padding: 8px 16px;
+    margin: 5px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.suggestion-link:hover, .example-link:hover {
+    background: #e50914;
+}
+
+.search-help {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.search-examples {
+    margin-top: 30px;
+}
+
+.category-tag {
+    display: inline-block;
+    background: #e50914;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    max-width: 600px;
+}
+
+.search-form input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #333;
+    border-radius: 25px;
+    background: #1f1f1f;
+    color: #fff;
+    font-size: 16px;
+}
+
+.search-form input:focus {
+    border-color: #e50914;
+    outline: none;
+}
+
+.search-form button {
+    padding: 12px 24px;
+    border-radius: 25px;
+    white-space: nowrap;
+}
+
+/* ========== ADVANCED ANIMATIONS & EFFECTS ========== */
+
+/* Loading Spinner */
+.loading-spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(229, 9, 20, 0.3);
+    border-radius: 50%;
+    border-top-color: #e50914;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Pulse Animation for Important Elements */
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Glow Effect */
+.glow {
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+    }
+    to {
+        box-shadow: 0 0 20px rgba(229, 9, 20, 0.8), 0 0 30px rgba(229, 9, 20, 0.6);
+    }
+}
+
+/* Floating Animation */
+.float {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Slide In Animations */
+.slide-in-left {
+    animation: slideInLeft 0.8s ease-out;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.slide-in-right {
+    animation: slideInRight 0.8s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Scale In Animation */
+.scale-in {
+    animation: scaleIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Bounce Animation */
+.bounce-in {
+    animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Gradient Text Animation */
+.gradient-text {
+    background: linear-gradient(45deg, #e50914, #ff6b6b, #e50914);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Typewriter Effect */
+.typewriter {
+    overflow: hidden;
+    border-right: 2px solid #e50914;
+    white-space: nowrap;
+    animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: #e50914; }
+}
+
+/* Parallax Scroll Effect */
+.parallax {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* Morphing Background */
+.morphing-bg {
+    background: linear-gradient(-45deg, #141414, #1a1a1a, #0f0f0f, #252525);
+    background-size: 400% 400%;
+    animation: morphing 15s ease infinite;
+}
+
+@keyframes morphing {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Hover Ripple Effect */
+.ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(229, 9, 20, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.ripple:hover::after {
+    width: 300px;
+    height: 300px;
+}
+
+/* Neon Glow Text */
+.neon-text {
+    color: #fff;
+    text-shadow: 
+        0 0 5px #e50914,
+        0 0 10px #e50914,
+        0 0 15px #e50914,
+        0 0 20px #e50914;
+    animation: neonFlicker 2s infinite alternate;
+}
+
+@keyframes neonFlicker {
+    0%, 100% {
+        text-shadow: 
+            0 0 5px #e50914,
+            0 0 10px #e50914,
+            0 0 15px #e50914,
+            0 0 20px #e50914;
+    }
+    50% {
+        text-shadow: 
+            0 0 2px #e50914,
+            0 0 5px #e50914,
+            0 0 8px #e50914,
+            0 0 12px #e50914;
+    }
+}
+
+/* 3D Card Flip Effect */
+.flip-card {
+    perspective: 1000px;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+}
+
+.flip-card-back {
+    transform: rotateY(180deg);
+    background: linear-gradient(135deg, #e50914 0%, #ff1744 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+/* Particle Animation */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: rgba(229, 9, 20, 0.5);
+    border-radius: 50%;
+    animation: particleFloat 10s infinite linear;
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-10vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Smooth Page Transitions */
+.page-transition {
+    animation: pageSlideIn 0.6s ease-out;
+}
+
+@keyframes pageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Interactive Hover Effects for Sections */
+section {
+    transition: all 0.3s ease;
+}
+
+section:hover {
+    transform: translateY(-2px);
+}
+
+/* Enhanced Focus States */
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #e50914;
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+    transform: scale(1.02);
+}
+
+/* Scroll Reveal Animation */
+.reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Play Overlay Animation */
+.play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: rgba(229, 9, 20, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.play-overlay::after {
+    content: '▶';
+    color: white;
+    font-size: 20px;
+    margin-left: 3px;
+}
+
+.film-card:hover .play-overlay {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* Russian Badge Animations */
+.russian-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: bold;
+    z-index: 10;
+    animation: badgePulse 2s infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.vk-badge {
+    background: linear-gradient(135deg, #4680C2 0%, #5A9BD4 100%);
+    color: white;
+}
+
+.rutube-badge {
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8E53 100%);
+    color: white;
+}
+/* ========== BEAUTIFUL TYPOGRAPHY ========== */
+
+/* Headings with elegant fonts */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5em;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff 0%, #e50914 50%, #fff 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 4s ease infinite;
+}
+
+h2 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: #fff;
+    position: relative;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #e50914, #ff6b6b);
+    border-radius: 2px;
+}
+
+h3 {
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    font-weight: 600;
+    color: #f5f5f5;
+}
+
+h4 {
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-weight: 600;
+    color: #e0e0e0;
+}
+
+h5 {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 500;
+    color: #d0d0d0;
+}
+
+h6 {
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
+    font-weight: 500;
+    color: #c0c0c0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Paragraph styles */
+p {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    line-height: 1.8;
+    color: #e0e0e0;
+    margin-bottom: 1.2em;
+    font-weight: 400;
+}
+
+/* Lead text */
+.lead {
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    font-weight: 300;
+    line-height: 1.6;
+    color: #f0f0f0;
+    margin-bottom: 2em;
+}
+
+/* Small text */
+small, .small {
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    color: #b0b0b0;
+    font-weight: 400;
+}
+
+/* Links */
+a {
+    color: #e50914;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+a:hover {
+    color: #ff6b6b;
+    text-shadow: 0 0 8px rgba(229, 9, 20, 0.4);
+}
+
+/* Logo typography */
+.logo {
+    font-family: 'Orbitron', 'Exo 2', monospace;
+    font-weight: 700;
+    font-size: 32px;
+    background: linear-gradient(135deg, #e50914 0%, #ff6b35 50%, #ffd700 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+    transition: all 0.3s ease;
+    text-shadow: none;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    letter-spacing: -0.02em;
+}
+
+/* Navigation typography */
+.nav-links a {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: clamp(0.9rem, 2vw, 1rem);
+    letter-spacing: 0.02em;
+}
+
+/* Button typography */
+.btn {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: clamp(0.85rem, 1.8vw, 0.95rem);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* Film card typography */
+.film-info h3 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+}
+
+.film-info p {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+    line-height: 1.5;
+}
+
+/* Special text effects */
+.elegant-text {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+    color: #f0f0f0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.modern-text {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: clamp(1rem, 2vw, 1.1rem);
+    letter-spacing: 0.02em;
+    color: #e0e0e0;
+}
+
+.code-text {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-weight: 400;
+    font-size: clamp(0.85rem, 1.8vw, 0.95rem);
+    background: rgba(229, 9, 20, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #ff6b6b;
+}
+
+/* Gradient text variations */
+.gradient-text-red {
+    background: linear-gradient(135deg, #e50914 0%, #ff6b6b 50%, #ff1744 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease infinite;
+}
+
+.gradient-text-gold {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffc107 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 4s ease infinite;
+}
+
+.gradient-text-blue {
+    background: linear-gradient(135deg, #2196f3 0%, #64b5f6 50%, #1976d2 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3.5s ease infinite;
+}
+
+/* Text shadows and effects */
+.text-shadow-soft {
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.text-shadow-strong {
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.text-glow {
+    text-shadow: 0 0 10px rgba(229, 9, 20, 0.5), 0 0 20px rgba(229, 9, 20, 0.3);
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        line-height: 1.3;
+        margin-bottom: 0.8em;
+    }
+    
+    p {
+        margin-bottom: 1em;
+    }
+}
+
+/* Font loading optimization - handled by Google Fonts */
+
+/* Text selection */
+::selection {
+    background: rgba(229, 9, 20, 0.3);
+    color: #fff;
+}
+
+::-moz-selection {
+    background: rgba(229, 9, 20, 0.3);
+    color: #fff;
+}
+
+/* Enhanced readability */
+.readable-text {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1rem, 2.2vw, 1.15rem);
+    line-height: 1.8;
+    color: #e8e8e8;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+}
+
+/* Cinematic text style */
+.cinematic-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #fff 0%, #e50914 30%, #fff 60%, #e50914 100%);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: cinematicGlow 5s ease infinite;
+    text-shadow: 0 0 30px rgba(229, 9, 20, 0.3);
+}
+
+@keyframes cinematicGlow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Subtitle style */
+.subtitle {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    color: #b0b0b0;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 2em;
+}
+
+/* Quote style */
+.quote {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.2rem, 2.8vw, 1.6rem);
+    color: #d0d0d0;
+    border-left: 4px solid #e50914;
+    padding-left: 1.5em;
+    margin: 2em 0;
+    position: relative;
+}
+
+.quote::before {
+    content: '"';
+    font-size: 3em;
+    color: #e50914;
+    position: absolute;
+    left: -0.2em;
+    top: -0.3em;
+    opacity: 0.3;
+}
+
+/* Badge typography */
+.badge {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Stats typography */
+.stats-number {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: #e50914;
+    line-height: 1;
+}
+
+.stats-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: clamp(0.9rem, 1.8vw, 1rem);
+    color: #b0b0b0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+/* ========== TRAILER SECTION STYLES ========== */
+
+.trailer-section {
+    margin: 50px 0;
+    padding: 30px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    animation: slideInUp 0.8s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.trailer-section h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+}
+
+.trailer-container {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.trailer-wrapper {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.trailer-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 12px;
+}
+
+.trailer-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.trailer-wrapper:hover .trailer-overlay {
+    opacity: 0;
+}
+
+.play-button {
+    width: 80px;
+    height: 80px;
+    background: rgba(229, 9, 20, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+    animation: pulse 2s infinite;
+    backdrop-filter: blur(10px);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.7);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 20px rgba(229, 9, 20, 0);
+    }
+}
+
+.trailer-info {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.platform-badge {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.vk-badge, .rutube-badge, .video-badge {
+    background: linear-gradient(135deg, #4680C2 0%, #5A9BD4 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    animation: badgeGlow 3s ease infinite;
+}
+
+.rutube-badge {
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8E53 100%);
+}
+
+.video-badge {
+    background: linear-gradient(135deg, #666 0%, #888 100%);
+}
+
+@keyframes badgeGlow {
+    0%, 100% { box-shadow: 0 0 5px rgba(70, 128, 194, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(70, 128, 194, 0.8); }
+}
+
+.russian-flag {
+    background: linear-gradient(135deg, #e50914 0%, #ff1744 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    animation: flagWave 2s ease infinite;
+}
+
+@keyframes flagWave {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.trailer-description {
+    color: #ccc;
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Platform specific styles */
+.vk-trailer {
+    border-left: 4px solid #4680C2;
+}
+
+.rutube-trailer {
+    border-left: 4px solid #FF6B35;
+}
+
+/* Loading state */
+.trailer-wrapper::before {
+    content: 'Загрузка трейлера...';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ccc;
+    font-size: 18px;
+    z-index: 1;
+}
+
+/* Error state */
+.trailer-error {
+    background: #2a1a1a;
+    border: 2px dashed #e50914;
+    padding: 40px;
+    text-align: center;
+    border-radius: 12px;
+}
+
+.trailer-error h3 {
+    color: #e50914;
+    margin-bottom: 15px;
+}
+
+.trailer-error p {
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .trailer-section {
+        margin: 30px 0;
+        padding: 20px;
+    }
+    
+    .play-button {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+    }
+    
+    .platform-badge {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .trailer-description {
+        font-size: 14px;
+    }
+}
+
+/* Accessibility */
+.trailer-wrapper:focus-within {
+    outline: 2px solid #e50914;
+    outline-offset: 4px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .trailer-section {
+        border: 2px solid #fff;
+    }
+    
+    .play-button {
+        background: #e50914;
+        border: 2px solid #fff;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .trailer-section {
+        animation: none;
+    }
+    
+    .play-button {
+        animation: none;
+    }
+    
+    .vk-badge, .rutube-badge, .video-badge, .russian-flag {
+        animation: none;
+    }
+}
+/* ========== RUSSIAN TRAILER ENHANCEMENTS ========== */
+
+.play-text {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.trailer-alternative {
+    background: linear-gradient(135deg, #2a1a1a 0%, #1a1a1a 100%);
+    border: 2px dashed #e50914;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.alternative-content h3 {
+    color: #e50914;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.alternative-content p {
+    color: #ccc;
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #e50914 0%, #ff1744 100%);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(229, 9, 20, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(229, 9, 20, 0.4);
+    background: linear-gradient(135deg, #ff1744 0%, #e50914 100%);
+}
+
+/* Russian platform specific styles */
+.vk-trailer .platform-badge .vk-badge {
+    background: linear-gradient(135deg, #4680C2 0%, #5A9BD4 100%);
+    animation: vkPulse 3s ease infinite;
+}
+
+@keyframes vkPulse {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(70, 128, 194, 0.5);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(70, 128, 194, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+.rutube-trailer .platform-badge .rutube-badge {
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8E53 100%);
+    animation: rutubePulse 3s ease infinite;
+}
+
+@keyframes rutubePulse {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(255, 107, 53, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+/* Enhanced Russian flag animation */
+.russian-flag {
+    position: relative;
+    overflow: hidden;
+}
+
+.russian-flag::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: russianShine 2s ease infinite;
+}
+
+@keyframes russianShine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Loading state for Russian platforms */
+.trailer-wrapper.loading::after {
+    content: 'Загрузка русского трейлера...';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #e50914;
+    font-size: 18px;
+    font-weight: 600;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Success message for Russian trailers */
+.russian-trailer-success {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-top: 15px;
+    display: inline-block;
+    animation: successPulse 2s ease infinite;
+}
+
+@keyframes successPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+/* Enhanced trailer overlay for Russian content */
+.trailer-overlay {
+    cursor: pointer;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(229, 9, 20, 0.2) 100%);
+}
+
+.trailer-overlay:hover {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(229, 9, 20, 0.3) 100%);
+}
+
+.trailer-overlay:hover .play-button {
+    transform: scale(1.2);
+    background: rgba(229, 9, 20, 1);
+}
+
+.trailer-overlay:hover .play-text {
+    transform: translateY(-5px);
+}
+
+/* Mobile optimizations for Russian trailers */
+@media (max-width: 768px) {
+    .alternative-content h3 {
+        font-size: 1.2rem;
+    }
+    
+    .alternative-content p {
+        font-size: 1rem;
+    }
+    
+    .btn-primary {
+        padding: 12px 24px;
+        font-size: 14px;
+    }
+    
+    .play-text {
+        font-size: 12px;
+    }
+}
+/* ========== RUSSIAN CINEMA PLATFORMS ========== */
+
+/* КиноПоиск HD */
+.kinopoisk-badge {
+    background: linear-gradient(135deg, #FFEB3B 0%, #FFC107 100%);
+    color: #333;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    animation: kinopoiskGlow 3s ease infinite;
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+}
+
+@keyframes kinopoiskGlow {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(255, 193, 7, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+/* Okko */
+.okko-badge {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    animation: okkoGlow 3s ease infinite;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+@keyframes okkoGlow {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(76, 175, 80, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+/* Wink */
+.wink-badge {
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    animation: winkGlow 3s ease infinite;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+}
+
+@keyframes winkGlow {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(33, 150, 243, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+/* START */
+.start-badge {
+    background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    animation: startGlow 3s ease infinite;
+    box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
+}
+
+@keyframes startGlow {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(156, 39, 176, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+/* ivi */
+.ivi-badge {
+    background: linear-gradient(135deg, #F44336 0%, #D32F2F 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    animation: iviGlow 3s ease infinite;
+    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+}
+
+@keyframes iviGlow {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(244, 67, 54, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+/* Platform specific trailer sections */
+.trailer-section.kinopoisk-trailer {
+    border-left: 4px solid #FFC107;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a1a 100%);
+}
+
+.trailer-section.okko-trailer {
+    border-left: 4px solid #4CAF50;
+    background: linear-gradient(135deg, #1a1a1a 0%, #1a2a1a 100%);
+}
+
+.trailer-section.wink-trailer {
+    border-left: 4px solid #2196F3;
+    background: linear-gradient(135deg, #1a1a1a 0%, #1a1a2a 100%);
+}
+
+.trailer-section.start-trailer {
+    border-left: 4px solid #9C27B0;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a1a2a 100%);
+}
+
+.trailer-section.ivi-trailer {
+    border-left: 4px solid #F44336;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a1a1a 100%);
+}
+
+/* Enhanced Russian cinema badges */
+.kinopoisk-badge, .okko-badge, .wink-badge, .start-badge, .ivi-badge {
+    position: relative;
+    overflow: hidden;
+}
+
+.kinopoisk-badge::before, .okko-badge::before, .wink-badge::before, 
+.start-badge::before, .ivi-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: platformShine 2s ease infinite;
+}
+
+@keyframes platformShine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Cinema platform hover effects */
+.kinopoisk-badge:hover {
+    background: linear-gradient(135deg, #FFC107 0%, #FFEB3B 100%);
+    transform: scale(1.1);
+}
+
+.okko-badge:hover {
+    background: linear-gradient(135deg, #45a049 0%, #4CAF50 100%);
+    transform: scale(1.1);
+}
+
+.wink-badge:hover {
+    background: linear-gradient(135deg, #1976D2 0%, #2196F3 100%);
+    transform: scale(1.1);
+}
+
+.start-badge:hover {
+    background: linear-gradient(135deg, #7B1FA2 0%, #9C27B0 100%);
+    transform: scale(1.1);
+}
+
+.ivi-badge:hover {
+    background: linear-gradient(135deg, #D32F2F 0%, #F44336 100%);
+    transform: scale(1.1);
+}
+
+/* Russian cinema success indicators */
+.russian-cinema-success {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    padding: 10px 15px;
+    background: rgba(76, 175, 80, 0.1);
+    border-radius: 8px;
+    border-left: 4px solid #4CAF50;
+}
+
+.russian-cinema-success::before {
+    content: '✅';
+    font-size: 16px;
+}
+
+/* Mobile optimizations for cinema platforms */
+@media (max-width: 768px) {
+    .kinopoisk-badge, .okko-badge, .wink-badge, .start-badge, .ivi-badge {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .platform-badge {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+/* ========== RUSSIAN MOVIE SITES BADGES ========== */
+
+/* КиноАфиша */
+.kinoafisha-badge {
+    background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    animation: kinoafishaGlow 3s ease infinite;
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+@keyframes kinoafishaGlow {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(255, 107, 53, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+/* Кино-Театр.ру */
+.kinoteatr-badge {
+    background: linear-gradient(135deg, #8E24AA 0%, #AB47BC 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    animation: kinoteatrGlow 3s ease infinite;
+    box-shadow: 0 4px 15px rgba(142, 36, 170, 0.3);
+}
+
+@keyframes kinoteatrGlow {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(142, 36, 170, 0.5);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(142, 36, 170, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+/* Film.ru */
+.filmru-badge {
+    background: linear-gradient(135deg, #1976D2 0%, #42A5F5 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    animation: filmruGlow 3s ease infinite;
+    box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+}
+
+@keyframes filmruGlow {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(25, 118, 210, 0.5);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(25, 118, 210, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+/* Кинокрад */
+.kinokrad-badge {
+    background: linear-gradient(135deg, #388E3C 0%, #66BB6A 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    animation: kinokradGlow 3s ease infinite;
+    box-shadow: 0 4px 15px rgba(56, 142, 60, 0.3);
+}
+
+@keyframes kinokradGlow {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(56, 142, 60, 0.5);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(56, 142, 60, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+/* HDRezka */
+.hdrezka-badge {
+    background: linear-gradient(135deg, #D32F2F 0%, #F44336 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    animation: hdrezkaGlow 3s ease infinite;
+    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+}
+
+@keyframes hdrezkaGlow {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(211, 47, 47, 0.5);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(211, 47, 47, 0.8);
+        transform: scale(1.05);
+    }
+}
+
+/* Platform specific trailer sections for movie sites */
+.trailer-section.kinoafisha-trailer {
+    border-left: 4px solid #FF6B35;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a1a1a 100%);
+}
+
+.trailer-section.kinoteatr-trailer {
+    border-left: 4px solid #8E24AA;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a1a2a 100%);
+}
+
+.trailer-section.filmru-trailer {
+    border-left: 4px solid #1976D2;
+    background: linear-gradient(135deg, #1a1a1a 0%, #1a1a2a 100%);
+}
+
+.trailer-section.kinokrad-trailer {
+    border-left: 4px solid #388E3C;
+    background: linear-gradient(135deg, #1a1a1a 0%, #1a2a1a 100%);
+}
+
+.trailer-section.hdrezka-trailer {
+    border-left: 4px solid #D32F2F;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a1a1a 100%);
+}
+
+/* Enhanced movie sites badges */
+.kinoafisha-badge, .kinoteatr-badge, .filmru-badge, .kinokrad-badge, .hdrezka-badge {
+    position: relative;
+    overflow: hidden;
+}
+
+.kinoafisha-badge::before, .kinoteatr-badge::before, .filmru-badge::before, 
+.kinokrad-badge::before, .hdrezka-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: movieSiteShine 2s ease infinite;
+}
+
+@keyframes movieSiteShine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Movie sites hover effects */
+.kinoafisha-badge:hover {
+    background: linear-gradient(135deg, #F7931E 0%, #FF6B35 100%);
+    transform: scale(1.1);
+}
+
+.kinoteatr-badge:hover {
+    background: linear-gradient(135deg, #AB47BC 0%, #8E24AA 100%);
+    transform: scale(1.1);
+}
+
+.filmru-badge:hover {
+    background: linear-gradient(135deg, #42A5F5 0%, #1976D2 100%);
+    transform: scale(1.1);
+}
+
+.kinokrad-badge:hover {
+    background: linear-gradient(135deg, #66BB6A 0%, #388E3C 100%);
+    transform: scale(1.1);
+}
+
+.hdrezka-badge:hover {
+    background: linear-gradient(135deg, #F44336 0%, #D32F2F 100%);
+    transform: scale(1.1);
+}
+
+/* Russian movie sites success indicators */
+.russian-movie-sites-success {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    padding: 10px 15px;
+    background: rgba(56, 142, 60, 0.1);
+    border-radius: 8px;
+    border-left: 4px solid #388E3C;
+}
+
+.russian-movie-sites-success::before {
+    content: '🎬';
+    font-size: 16px;
+}
+
+/* Special styling for external links */
+.trailer-alternative .btn-primary {
+    background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+    border: 2px solid #FF6B35;
+    position: relative;
+    overflow: hidden;
+}
+
+.trailer-alternative .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.trailer-alternative .btn-primary:hover::before {
+    left: 100%;
+}
+
+.trailer-alternative .btn-primary:hover {
+    background: linear-gradient(135deg, #F7931E 0%, #FF6B35 100%);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+}
+
+/* Mobile optimizations for movie sites */
+@media (max-width: 768px) {
+    .kinoafisha-badge, .kinoteatr-badge, .filmru-badge, .kinokrad-badge, .hdrezka-badge {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .platform-badge {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .trailer-alternative .btn-primary {
+        padding: 10px 20px;
+        font-size: 13px;
+    }
+}
+
+/* ========== RUSSIAN MOVIE SITES BADGES ========== */
+
+/* КиноАфиша badge */
+.kinoafisha-badge {
+    background: linear-gradient(135deg, #FF8C00 0%, #FFA500 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+    box-shadow: 0 2px 8px rgba(255, 140, 0, 0.3);
+    animation: kinoafishaPulse 3s ease infinite;
+}
+
+@keyframes kinoafishaPulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(255, 140, 0, 0.3); }
+    50% { box-shadow: 0 4px 16px rgba(255, 140, 0, 0.6); }
+}
+
+/* Кино-Театр.ру badge */
+.kinoteatr-badge {
+    background: linear-gradient(135deg, #8A2BE2 0%, #9932CC 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+    box-shadow: 0 2px 8px rgba(138, 43, 226, 0.3);
+    animation: kinoteatrPulse 3s ease infinite;
+}
+
+@keyframes kinoteatrPulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(138, 43, 226, 0.3); }
+    50% { box-shadow: 0 4px 16px rgba(138, 43, 226, 0.6); }
+}
+
+/* Film.ru badge */
+.filmru-badge {
+    background: linear-gradient(135deg, #1E90FF 0%, #4169E1 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+    box-shadow: 0 2px 8px rgba(30, 144, 255, 0.3);
+    animation: filmruPulse 3s ease infinite;
+}
+
+@keyframes filmruPulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(30, 144, 255, 0.3); }
+    50% { box-shadow: 0 4px 16px rgba(30, 144, 255, 0.6); }
+}
+
+/* Кинокрад badge */
+.kinokrad-badge {
+    background: linear-gradient(135deg, #32CD32 0%, #228B22 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+    box-shadow: 0 2px 8px rgba(50, 205, 50, 0.3);
+    animation: kinokradPulse 3s ease infinite;
+}
+
+@keyframes kinokradPulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(50, 205, 50, 0.3); }
+    50% { box-shadow: 0 4px 16px rgba(50, 205, 50, 0.6); }
+}
+
+/* HDRezka badge */
+.hdrezka-badge {
+    background: linear-gradient(135deg, #DC143C 0%, #B22222 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+    box-shadow: 0 2px 8px rgba(220, 20, 60, 0.3);
+    animation: hdrezkaPulse 3s ease infinite;
+}
+
+@keyframes hdrezkaPulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(220, 20, 60, 0.3); }
+    50% { box-shadow: 0 4px 16px rgba(220, 20, 60, 0.6); }
+}
+
+/* КиноПоиск badge */
+.kinopoisk-badge {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #333;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+    animation: kinopoiskPulse 3s ease infinite;
+}
+
+@keyframes kinopoiskPulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3); }
+    50% { box-shadow: 0 4px 16px rgba(255, 215, 0, 0.6); }
+}
+
+/* Okko badge */
+.okko-badge {
+    background: linear-gradient(135deg, #00C851 0%, #007E33 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+    box-shadow: 0 2px 8px rgba(0, 200, 81, 0.3);
+    animation: okkoPulse 3s ease infinite;
+}
+
+@keyframes okkoPulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(0, 200, 81, 0.3); }
+    50% { box-shadow: 0 4px 16px rgba(0, 200, 81, 0.6); }
+}
+
+/* Wink badge */
+.wink-badge {
+    background: linear-gradient(135deg, #9C27B0 0%, #673AB7 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+    box-shadow: 0 2px 8px rgba(156, 39, 176, 0.3);
+    animation: winkPulse 3s ease infinite;
+}
+
+@keyframes winkPulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(156, 39, 176, 0.3); }
+    50% { box-shadow: 0 4px 16px rgba(156, 39, 176, 0.6); }
+}
+
+/* START badge */
+.start-badge {
+    background: linear-gradient(135deg, #9C27B0 0%, #E91E63 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+    box-shadow: 0 2px 8px rgba(156, 39, 176, 0.3);
+    animation: startPulse 3s ease infinite;
+}
+
+@keyframes startPulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(156, 39, 176, 0.3); }
+    50% { box-shadow: 0 4px 16px rgba(156, 39, 176, 0.6); }
+}
+
+/* ivi badge */
+.ivi-badge {
+    background: linear-gradient(135deg, #FF5722 0%, #E53935 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+    box-shadow: 0 2px 8px rgba(255, 87, 34, 0.3);
+    animation: iviPulse 3s ease infinite;
+}
+
+@keyframes iviPulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(255, 87, 34, 0.3); }
+    50% { box-shadow: 0 4px 16px rgba(255, 87, 34, 0.6); }
+}
+
+/* Russian flag indicator */
+.russian-flag {
+    background: linear-gradient(135deg, #FF0000 0%, #0000FF 50%, #FFFFFF 100%);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 15px;
+    font-size: 11px;
+    font-weight: bold;
+    display: inline-block;
+    margin-left: 10px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+    animation: russianFlagWave 2s ease infinite;
+}
+
+@keyframes russianFlagWave {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Platform badge container */
+.platform-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+/* Trailer alternative styling */
+.trailer-alternative {
+    background: linear-gradient(135deg, #2a1a1a 0%, #1a1a1a 100%);
+    border: 2px dashed #e50914;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.alternative-content h3 {
+    color: #e50914;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.alternative-content p {
+    color: #ccc;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #e50914 0%, #b8070f 100%);
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(229, 9, 20, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #b8070f 0%, #e50914 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(229, 9, 20, 0.5);
+    color: white;
+    text-decoration: none;
+}
+
+/* Mobile responsiveness for badges */
+@media (max-width: 768px) {
+    .platform-badge {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .kinoafisha-badge,
+    .kinoteatr-badge,
+    .filmru-badge,
+    .kinokrad-badge,
+    .hdrezka-badge,
+    .kinopoisk-badge,
+    .okko-badge,
+    .wink-badge,
+    .start-badge,
+    .ivi-badge {
+        margin: 5px 0;
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+    
+    .russian-flag {
+        margin: 5px 0;
+        font-size: 12px;
+    }
+}
+/* ========== RUTUBE EMBEDDED PLAYER STYLES ========== */
+
+.trailer-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    background: #000;
+}
+
+.trailer-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 12px;
+}
+
+.trailer-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(229,9,20,0.3) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    z-index: 10;
+}
+
+.trailer-overlay:hover {
+    background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(229,9,20,0.5) 100%);
+    transform: scale(1.02);
+}
+
+.play-button {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #e50914 0%, #b8070f 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: white;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 20px rgba(229, 9, 20, 0.4);
+    transition: all 0.3s ease;
+    animation: playButtonPulse 2s ease infinite;
+}
+
+@keyframes playButtonPulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 4px 20px rgba(229, 9, 20, 0.4);
+    }
+    50% { 
+        transform: scale(1.1);
+        box-shadow: 0 6px 30px rgba(229, 9, 20, 0.6);
+    }
+}
+
+.trailer-overlay:hover .play-button {
+    transform: scale(1.2);
+    box-shadow: 0 6px 30px rgba(229, 9, 20, 0.8);
+}
+
+.play-text {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    animation: playTextGlow 3s ease infinite;
+}
+
+@keyframes playTextGlow {
+    0%, 100% { 
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    }
+    50% { 
+        text-shadow: 2px 2px 8px rgba(229, 9, 20, 0.8);
+    }
+}
+
+/* Rutube specific styling */
+.rutube-trailer .trailer-section {
+    border-left: 4px solid #FF6B35;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d1a1a 100%);
+}
+
+.rutube-trailer .trailer-section::before {
+    content: "🇷🇺 Rutube - Русская озвучка";
+    background: linear-gradient(45deg, #FF6B35, #f7931e);
+}
+
+/* Loading state for Rutube */
+.trailer-wrapper.loading::after {
+    content: 'Загрузка Rutube трейлера...';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #e50914;
+    font-size: 16px;
+    font-weight: bold;
+    z-index: 5;
+}
+
+/* Mobile optimizations for embedded player */
+@media (max-width: 768px) {
+    .trailer-wrapper {
+        padding-bottom: 75%; /* More square on mobile */
+        max-width: 100%;
+        margin: 0 10px;
+    }
+    
+    .play-button {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+    }
+    
+    .play-text {
+        font-size: 16px;
+    }
+    
+    .trailer-overlay:hover {
+        transform: none; /* Disable hover transform on mobile */
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .trailer-overlay {
+        background: rgba(0, 0, 0, 0.9);
+        border: 2px solid #fff;
+    }
+    
+    .play-button {
+        background: #fff;
+        color: #000;
+        border: 2px solid #000;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .play-button,
+    .play-text,
+    .trailer-overlay {
+        animation: none;
+    }
+    
+    .trailer-overlay:hover {
+        transform: none;
+    }
+}
+/* ========== ENHANCED LOGO STYLES ========== */
+
+/* Logo 3D effect */
+.logo {
+    text-shadow: 
+        1px 1px 0px rgba(229, 9, 20, 0.3),
+        2px 2px 0px rgba(229, 9, 20, 0.2),
+        3px 3px 0px rgba(229, 9, 20, 0.1);
+}
+
+/* Logo pulse animation */
+@keyframes logoPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+.logo:active {
+    animation: logoPulse 0.3s ease;
+}
+
+/* Logo gradient animation */
+@keyframes logoGradientShift {
+    0% {
+        background: linear-gradient(135deg, #e50914 0%, #ff6b35 50%, #ffd700 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    33% {
+        background: linear-gradient(135deg, #ff6b35 0%, #ffd700 50%, #e50914 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    66% {
+        background: linear-gradient(135deg, #ffd700 0%, #e50914 50%, #ff6b35 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    100% {
+        background: linear-gradient(135deg, #e50914 0%, #ff6b35 50%, #ffd700 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+}
+
+.logo:hover {
+    animation: logoGradientShift 2s ease infinite;
+}
+
+/* Mobile logo adjustments */
+@media (max-width: 768px) {
+    .logo {
+        font-size: 28px;
+        letter-spacing: 1px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 24px;
+        letter-spacing: 0.5px;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .logo {
+        background: #ffffff;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: none;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .logo {
+        animation: none;
+    }
+    
+    .logo:hover {
+        animation: none;
+        transform: none;
+    }
+}
+
+/* Logo focus styles for accessibility */
+.logo:focus {
+    outline: 2px solid #e50914;
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* Logo loading state */
+.logo.loading {
+    opacity: 0.7;
+    animation: logoGlow 1s ease-in-out infinite;
+}
+/* ========== FIX FOR FILM CARD CLICKABILITY ========== */
+
+/* Ensure all film cards are clickable */
+.film-card {
+    pointer-events: auto !important;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+}
+
+.film-card a {
+    pointer-events: auto !important;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    z-index: 2;
+}
+
+.film-card img {
+    pointer-events: auto !important;
+    cursor: pointer;
+}
+
+.film-info {
+    pointer-events: auto !important;
+    cursor: pointer;
+}
+
+/* Fix for overlapping elements */
+.film-card:hover {
+    z-index: 10 !important;
+}
+
+/* Fix for play overlay */
+.play-overlay {
+    pointer-events: none !important;
+}
+
+/* Fix for badges */
+.russian-badge {
+    pointer-events: none !important;
+}
+
+.featured-badge {
+    pointer-events: none !important;
+}
+
+/* Debug styles removed - badges are now working properly */
+/* ========== FIX RUSSIAN BADGE SIZE AND POSITION ========== */
+
+/* Override all russian-badge styles to make them smaller and less intrusive */
+.russian-badge {
+    position: absolute !important;
+    top: 5px !important;
+    right: 5px !important;
+    bottom: auto !important;
+    left: auto !important;
+    padding: 2px 6px !important;
+    border-radius: 8px !important;
+    font-size: 8px !important;
+    font-weight: 500 !important;
+    z-index: 3 !important;
+    animation: none !important;
+    opacity: 0.8 !important;
+    pointer-events: none !important;
+    max-width: 40px !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+}
+
+/* Make badges even smaller on hover to not interfere */
+.film-card:hover .russian-badge {
+    opacity: 0.6 !important;
+    transform: scale(0.9) !important;
+}
+
+/* Specific badge colors - keep them but smaller */
+.russian-badge.vk-badge {
+    background: linear-gradient(135deg, #4680C2 0%, #5A9BD4 100%) !important;
+    color: white !important;
+}
+
+.russian-badge.rutube-badge {
+    background: linear-gradient(135deg, #FF6B35 0%, #FF8E53 100%) !important;
+    color: white !important;
+}
+
+.russian-badge.kinoafisha-badge {
+    background: linear-gradient(135deg, #FF8C00 0%, #FFA500 100%) !important;
+    color: white !important;
+}
+
+.russian-badge.kinoteatr-badge {
+    background: linear-gradient(135deg, #8A2BE2 0%, #9932CC 100%) !important;
+    color: white !important;
+}
+
+.russian-badge.filmru-badge {
+    background: linear-gradient(135deg, #1E90FF 0%, #4169E1 100%) !important;
+    color: white !important;
+}
+
+.russian-badge.kinokrad-badge {
+    background: linear-gradient(135deg, #32CD32 0%, #228B22 100%) !important;
+    color: white !important;
+}
+
+.russian-badge.hdrezka-badge {
+    background: linear-gradient(135deg, #DC143C 0%, #B22222 100%) !important;
+    color: white !important;
+}
+
+/* Remove all conflicting animations */
+@keyframes badgePulse {
+    /* Disable animation */
+}
+
+/* Mobile - make badges even smaller */
+@media (max-width: 768px) {
+    .russian-badge {
+        font-size: 7px !important;
+        padding: 1px 4px !important;
+        max-width: 30px !important;
+    }
+}
+
+/* Стили для актеров */
+.actors-section {
+    margin: 20px 0;
+    padding: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.actors-section h3 {
+    color: #fff;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.actors-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.actor-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    transition: all 0.3s ease;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-width: 100px;
+}
+
+.actor-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(229, 9, 20, 0.5);
+    box-shadow: 0 10px 30px rgba(229, 9, 20, 0.2);
+}
+
+.actor-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: border-color 0.3s ease;
+}
+
+.actor-card:hover .actor-photo {
+    border-color: rgba(229, 9, 20, 0.7);
+}
+
+.actor-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.no-photo {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.actor-name {
+    font-size: 0.9em;
+    text-align: center;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+/* Адаптивность для актеров */
+@media (max-width: 768px) {
+    .actors-list {
+        justify-content: center;
+    }
+    
+    .actor-card {
+        min-width: 80px;
+    }
+    
+    .actor-photo {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .actor-name {
+        font-size: 0.8em;
+    }
+}
+
+/* Стили для страниц актеров */
+.actors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.actor-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.actor-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(229, 9, 20, 0.5);
+    box-shadow: 0 15px 40px rgba(229, 9, 20, 0.2);
+}
+
+.actor-item img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.actor-item-info {
+    padding: 15px;
+}
+
+.actor-item h3 {
+    color: #fff;
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.actor-item-meta {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+.actor-item-meta p {
+    margin-bottom: 4px;
+}
+
+.actor-bio-preview {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85em;
+    margin-top: 10px;
+    line-height: 1.4;
+}
