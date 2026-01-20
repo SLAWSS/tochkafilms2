@@ -1,0 +1,77 @@
+{% extends 'films/base.html' %}
+{% load static %}
+
+{% block title %}Уведомления - TochkaFilms{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1 class="cinematic-title">🔔 Уведомления</h1>
+    </div>
+
+    {% if page_obj %}
+        <div class="results-info">
+            <p class="readable-text">Всего уведомлений: <span class="stats-number">{{ page_obj.paginator.count }}</span></p>
+        </div>
+
+        <div class="notifications-list">
+            {% for notification in page_obj %}
+            <div class="notification-item {% if not notification.is_read %}notification-unread{% endif %}">
+                <div class="notification-icon">
+                    {% if notification.type == 'new_film' %}
+                        🎬
+                    {% elif notification.type == 'new_review' %}
+                        ⭐
+                    {% elif notification.type == 'recommendation' %}
+                        💡
+                    {% else %}
+                        🔔
+                    {% endif %}
+                </div>
+                <div class="notification-info">
+                    <h3>{{ notification.title }}</h3>
+                    <p class="notification-message">{{ notification.message }}</p>
+                    <div class="notification-date">
+                        {{ notification.created_at|date:"d.m.Y H:i" }}
+                    </div>
+                </div>
+                <div class="notification-actions">
+                    {% if notification.film %}
+                        <a href="{% url 'films:film_detail' notification.film.pk %}" class="btn btn-small">
+                            Посмотреть фильм
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Пагинация -->
+        {% if page_obj.has_other_pages %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; Первая</a>
+                <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+            {% endif %}
+            
+            <span class="current-page">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            </span>
+            
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">🔔</div>
+            <h2>Нет уведомлений</h2>
+            <p>У вас пока нет уведомлений. Продолжайте пользоваться сайтом!</p>
+            <a href="{% url 'films:home' %}" class="btn">На главную</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

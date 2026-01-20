@@ -1,0 +1,171 @@
+{% extends 'films/base.html' %}
+{% load static %}
+
+{% block title %}Главная - TochkaFilms{% endblock %}
+
+{% block content %}
+<section class="hero parallax morphing-bg">
+    <div class="container">
+        <h1 class="cinematic-title bounce-in">Добро пожаловать в TochkaFilms</h1>
+        <p class="subtitle slide-in-right float">Смотрите лучшие фильмы онлайн с русской озвучкой 🇷🇺</p>
+        <div class="quote elegant-text scale-in">
+            "Кино — это правда двадцать четыре раза в секунду" — Жан-Люк Годар
+        </div>
+    </div>
+</section>
+
+{% if featured_films %}
+<section class="featured reveal">
+    <div class="container">
+        <h2 class="gradient-text-gold text-glow">🎬 Рекомендуемые</h2>
+        <div class="film-grid">
+            {% for film in featured_films %}
+            <div class="film-card ripple scale-in glow">
+                {% if film.is_featured %}
+                    <div class="featured-badge pulse">⭐ Рекомендуем</div>
+                {% endif %}
+                {% if film.trailer_url %}
+                    {% if 'vk.com' in film.trailer_url %}
+                        <div class="russian-badge vk-badge">VK</div>
+                    {% elif 'rutube.ru' in film.trailer_url %}
+                        <div class="russian-badge rutube-badge">RuTube</div>
+                    {% endif %}
+                {% endif %}
+                <a href="{% url 'films:film_detail' film.pk %}">
+                    {% if film.poster %}
+                        <img src="{{ film.poster.url }}" alt="{{ film.title }}">
+                        {% if film.trailer_url %}
+                            <div class="play-overlay"></div>
+                        {% endif %}
+                    {% else %}
+                        <div class="no-poster">{{ film.title }}</div>
+                    {% endif %}
+                    <div class="film-info">
+                        <h3>{{ film.title }}</h3>
+                        <p>{{ film.year }} | <span class="rating-stars">⭐ {{ film.rating }}</span></p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="recent reveal">
+    <div class="container">
+        <h2 class="gradient-text-blue slide-in-left">🆕 Недавно добавленные</h2>
+        <div class="film-grid">
+            {% for film in recent_films %}
+            <div class="film-card">
+                {% if film.trailer_url %}
+                    {% if 'vk.com' in film.trailer_url %}
+                        <div class="russian-badge vk-badge">VK</div>
+                    {% elif 'rutube.ru' in film.trailer_url %}
+                        <div class="russian-badge rutube-badge">RuTube</div>
+                    {% endif %}
+                {% endif %}
+                <a href="{% url 'films:film_detail' film.pk %}">
+                    {% if film.poster %}
+                        <img src="{{ film.poster.url }}" alt="{{ film.title }}">
+                        {% if film.trailer_url %}
+                            <div class="play-overlay"></div>
+                        {% endif %}
+                    {% else %}
+                        <div class="no-poster">{{ film.title }}</div>
+                    {% endif %}
+                    <div class="film-info">
+                        <h3>{{ film.title }}</h3>
+                        <p>{{ film.year }} | <span class="rating-stars">⭐ {{ film.rating }}</span></p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% if user.is_authenticated and recommended_films %}
+<section class="recommended-section reveal">
+    <div class="container">
+        <h2 class="gradient-text-red glow">🎯 Рекомендации для вас</h2>
+        <div class="film-grid">
+            {% for film in recommended_films %}
+            <div class="film-card">
+                {% if film.trailer_url %}
+                    {% if 'vk.com' in film.trailer_url %}
+                        <div class="russian-badge vk-badge">VK</div>
+                    {% elif 'rutube.ru' in film.trailer_url %}
+                        <div class="russian-badge rutube-badge">RuTube</div>
+                    {% endif %}
+                {% endif %}
+                <a href="{% url 'films:film_detail' film.pk %}">
+                    {% if film.poster %}
+                        <img src="{{ film.poster.url }}" alt="{{ film.title }}">
+                        {% if film.trailer_url %}
+                            <div class="play-overlay"></div>
+                        {% endif %}
+                    {% else %}
+                        <div class="no-poster">{{ film.title }}</div>
+                    {% endif %}
+                    <div class="film-info">
+                        <h3>{{ film.title }}</h3>
+                        <p>{{ film.year }} | <span class="rating-stars">⭐ {{ film.rating }}</span></p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if user.is_authenticated and recent_viewed %}
+<section class="recent-viewed reveal">
+    <div class="container">
+        <h2 class="gradient-text-gold neon-text">📺 Недавно просмотренные</h2>
+        <div class="film-grid">
+            {% for view in recent_viewed %}
+            <div class="film-card">
+                {% if view.film.trailer_url %}
+                    {% if 'vk.com' in view.film.trailer_url %}
+                        <div class="russian-badge vk-badge">VK</div>
+                    {% elif 'rutube.ru' in view.film.trailer_url %}
+                        <div class="russian-badge rutube-badge">RuTube</div>
+                    {% endif %}
+                {% endif %}
+                <a href="{% url 'films:film_detail' view.film.pk %}">
+                    {% if view.film.poster %}
+                        <img src="{{ view.film.poster.url }}" alt="{{ view.film.title }}">
+                        {% if view.film.trailer_url %}
+                            <div class="play-overlay"></div>
+                        {% endif %}
+                    {% else %}
+                        <div class="no-poster">{{ view.film.title }}</div>
+                    {% endif %}
+                    <div class="film-info">
+                        <h3>{{ view.film.title }}</h3>
+                        <p>{{ view.film.year }} | <span class="rating-stars">⭐ {{ view.film.rating }}</span></p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="categories reveal">
+    <div class="container">
+        <h2 class="gradient-text-blue text-shadow-strong">🎭 Категории</h2>
+        <div class="category-list">
+            {% for category in categories %}
+                <a href="{% url 'films:category_films' category.slug %}" class="category-tag">
+                    <img src="{% static 'images/' %}{{ category.slug }}-icon.png" alt="{{ category.name }}" class="category-icon">
+                    {{ category.name }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

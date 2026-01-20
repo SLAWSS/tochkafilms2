@@ -1,0 +1,90 @@
+{% extends 'films/base.html' %}
+{% load static %}
+
+{% block title %}Топ фильмов - TochkaFilms{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>🏆 Топ фильмов</h1>
+    
+    <div class="top-sections">
+        <section class="top-section">
+            <h2>⭐ Лучшие по рейтингу</h2>
+            <div class="top-list">
+                {% for film in top_rated %}
+                <div class="top-item">
+                    <div class="top-number">{{ forloop.counter }}</div>
+                    <div class="top-poster">
+                        {% if film.poster %}
+                            <img src="{{ film.poster.url }}" alt="{{ film.title }}">
+                        {% endif %}
+                    </div>
+                    <div class="top-info">
+                        <h3><a href="{% url 'films:film_detail' film.pk %}">{{ film.title }}</a></h3>
+                        <p>{{ film.year }} | ⭐ {{ film.rating }}</p>
+                        <p class="top-description">{{ film.description|truncatewords:15 }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="top-section">
+            <h2>🔥 Самые популярные</h2>
+            <div class="top-list">
+                {% for film in most_popular %}
+                <div class="top-item">
+                    <div class="top-number">{{ forloop.counter }}</div>
+                    <div class="top-poster">
+                        {% if film.poster %}
+                            <img src="{{ film.poster.url }}" alt="{{ film.title }}">
+                        {% endif %}
+                    </div>
+                    <div class="top-info">
+                        <h3><a href="{% url 'films:film_detail' film.pk %}">{{ film.title }}</a></h3>
+                        <p>{{ film.year }} | 👁 {{ film.views_count }} просмотров</p>
+                        <p class="top-description">{{ film.description|truncatewords:15 }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+
+    <section class="category-tops">
+        <h2>📁 Топ по категориям</h2>
+        {% for category, films in top_by_category.items %}
+        <div class="category-top">
+            <h3>{{ category.name }}</h3>
+            <div class="film-grid">
+                {% for film in films %}
+                <div class="film-card">
+                    {% if film.trailer_url %}
+                        {% if 'vk.com' in film.trailer_url %}
+                            <div class="russian-badge vk-badge">VK</div>
+                        {% elif 'rutube.ru' in film.trailer_url %}
+                            <div class="russian-badge rutube-badge">RuTube</div>
+                        {% endif %}
+                    {% endif %}
+                    <a href="{% url 'films:film_detail' film.pk %}">
+                        {% if film.poster %}
+                            <img src="{{ film.poster.url }}" alt="{{ film.title }}">
+                            {% if film.trailer_url %}
+                                <div class="play-overlay"></div>
+                            {% endif %}
+                        {% else %}
+                            <div class="no-poster">{{ film.title }}</div>
+                        {% endif %}
+                        <div class="film-info">
+                            <h3>{{ film.title }}</h3>
+                            <p>{{ film.year }} | <span class="rating-stars">⭐ {{ film.rating }}</span></p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+</div>
+{% endblock %}

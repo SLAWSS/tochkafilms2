@@ -1,0 +1,129 @@
+{% extends 'films/base.html' %}
+{% load static %}
+
+{% block title %}{{ actor.name }} - TochkaFilms{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Навигация -->
+    <nav class="mb-6">
+        <a href="{% url 'films:actors_list' %}" class="text-blue-400 hover:text-blue-300">← Все актеры</a>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Фотография и основная информация -->
+        <div class="lg:col-span-1">
+            <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+                <!-- Фотография -->
+                <div class="aspect-w-3 aspect-h-4">
+                    {% if actor.photo %}
+                        <img 
+                            src="{{ actor.photo.url }}" 
+                            alt="{{ actor.name }}"
+                            class="w-full h-96 object-cover"
+                        >
+                    {% else %}
+                        <div class="w-full h-96 bg-gray-600 flex items-center justify-center">
+                            <span class="text-gray-400 text-6xl">👤</span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Основная информация -->
+                <div class="p-6">
+                    <h1 class="text-2xl font-bold text-white mb-4">{{ actor.name }}</h1>
+                    
+                    <div class="space-y-3 text-gray-300">
+                        <div class="flex items-center">
+                            <span class="text-blue-400 mr-2">🎂</span>
+                            <span>{{ actor.birth_date|date:"d.m.Y" }} ({{ actor.age }} лет)</span>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <span class="text-blue-400 mr-2">📍</span>
+                            <span>{{ actor.birth_place }}</span>
+                        </div>
+                        
+                        {% if actor.height %}
+                        <div class="flex items-center">
+                            <span class="text-blue-400 mr-2">📏</span>
+                            <span>{{ actor.height }} см</span>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="flex items-center">
+                            <span class="text-blue-400 mr-2">🎬</span>
+                            <span>{{ films_count }} фильм{{ films_count|pluralize:"ов" }} на сайте</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Биография и фильмография -->
+        <div class="lg:col-span-2 space-y-8">
+            <!-- Биография -->
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h2 class="text-xl font-semibold text-white mb-4">Биография</h2>
+                <div class="text-gray-300 leading-relaxed whitespace-pre-line">
+                    {{ actor.biography }}
+                </div>
+            </div>
+
+            <!-- Награды -->
+            {% if actor.awards %}
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h2 class="text-xl font-semibold text-white mb-4">🏆 Награды и достижения</h2>
+                <div class="text-gray-300 leading-relaxed">
+                    {{ actor.awards }}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Фильмография -->
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h2 class="text-xl font-semibold text-white mb-4">Фильмы на сайте</h2>
+                
+                {% if films %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {% for film in films %}
+                    <div class="bg-gray-700 rounded-lg p-4 hover:bg-gray-600 transition-colors">
+                        <a href="{% url 'films:film_detail' film.pk %}" class="block">
+                            <div class="flex items-center space-x-4">
+                                <!-- Мини-постер -->
+                                <div class="flex-shrink-0">
+                                    {% if film.poster %}
+                                        <img 
+                                            src="{{ film.poster.url }}" 
+                                            alt="{{ film.title }}"
+                                            class="w-16 h-24 object-cover rounded"
+                                        >
+                                    {% else %}
+                                        <div class="w-16 h-24 bg-gray-600 rounded flex items-center justify-center">
+                                            <span class="text-gray-400 text-xs">🎬</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Информация о фильме -->
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="text-white font-medium truncate">{{ film.title }}</h3>
+                                    <p class="text-gray-400 text-sm">{{ film.year }}</p>
+                                    <div class="flex items-center mt-1">
+                                        <span class="text-yellow-400 text-sm">⭐ {{ film.rating }}</span>
+                                        <span class="text-gray-500 text-sm ml-2">{{ film.duration }} мин</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-gray-400">Фильмы с участием этого актера пока не добавлены на сайт.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

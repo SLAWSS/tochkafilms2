@@ -1,0 +1,88 @@
+{% extends 'films/base.html' %}
+
+{% block title %}Поиск - TochkaFilms{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="cinematic-title">🔍 Поиск фильмов</h1>
+    
+    <form method="get" class="search-form">
+        <input type="text" name="q" placeholder="Введите название фильма..." value="{{ query }}" required>
+        <button type="submit" class="btn">Искать</button>
+    </form>
+
+    {% if query %}
+        <div class="search-results-header">
+            <h2>Результаты поиска: "{{ query }}"</h2>
+            {% if films_count > 0 %}
+                <p class="results-count">Найдено: {{ films_count }} фильм{{ films_count|pluralize:"ов" }}</p>
+            {% endif %}
+        </div>
+        
+        {% if films %}
+            <div class="film-grid">
+                {% for film in films %}
+                <div class="film-card">
+                    {% if film.trailer_url %}
+                        {% if 'vk.com' in film.trailer_url %}
+                            <div class="russian-badge vk-badge">VK</div>
+                        {% elif 'rutube.ru' in film.trailer_url %}
+                            <div class="russian-badge rutube-badge">RuTube</div>
+                        {% endif %}
+                    {% endif %}
+                    <a href="{% url 'films:film_detail' film.pk %}">
+                        {% if film.poster %}
+                            <img src="{{ film.poster.url }}" alt="{{ film.title }}">
+                            {% if film.trailer_url %}
+                                <div class="play-overlay"></div>
+                            {% endif %}
+                        {% else %}
+                            <div class="no-poster">{{ film.title }}</div>
+                        {% endif %}
+                        <div class="film-info">
+                            <h3>{{ film.title }}</h3>
+                            <p>{{ film.year }} | <span class="rating-stars">⭐ {{ film.rating }}</span></p>
+                            <div class="film-categories">
+                                {% for category in film.categories.all %}
+                                    <span class="category-tag">{{ category.name }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-results">
+                <div class="no-results-icon">🔍</div>
+                <h3>По запросу "{{ query }}" ничего не найдено</h3>
+                <p>Попробуйте:</p>
+                <ul>
+                    <li>Проверить правильность написания</li>
+                    <li>Использовать более общие термины</li>
+                    <li>Попробовать поиск по жанру (боевик, комедия, драма и т.д.)</li>
+                </ul>
+                <div class="search-suggestions">
+                    <p><strong>Популярные фильмы:</strong></p>
+                    <a href="{% url 'films:search' %}?q=крик" class="suggestion-link">Крик</a>
+                    <a href="{% url 'films:search' %}?q=матрица" class="suggestion-link">Матрица</a>
+                    <a href="{% url 'films:search' %}?q=джокер" class="suggestion-link">Джокер</a>
+                    <a href="{% url 'films:search' %}?q=дюна" class="suggestion-link">Дюна</a>
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="search-help">
+            <h2>🔍 Поиск фильмов</h2>
+            <p>Введите название фильма, описание или жанр для поиска</p>
+            <div class="search-examples">
+                <p><strong>Примеры поиска:</strong></p>
+                <a href="{% url 'films:search' %}?q=боевик" class="example-link">боевик</a>
+                <a href="{% url 'films:search' %}?q=2023" class="example-link">2023</a>
+                <a href="{% url 'films:search' %}?q=ужасы" class="example-link">ужасы</a>
+                <a href="{% url 'films:search' %}?q=комедия" class="example-link">комедия</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

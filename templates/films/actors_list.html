@@ -1,0 +1,108 @@
+{% extends 'films/base.html' %}
+{% load static %}
+
+{% block title %}Актеры - TochkaFilms{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-white">Актеры</h1>
+        
+        <!-- Поиск актеров -->
+        <div class="flex items-center space-x-4">
+            <form method="GET" action="{% url 'films:actors_search' %}" class="flex">
+                <input 
+                    type="text" 
+                    name="q" 
+                    placeholder="Поиск актеров..." 
+                    class="px-4 py-2 bg-gray-800 text-white rounded-l-lg border border-gray-600 focus:outline-none focus:border-blue-500"
+                    value="{{ request.GET.q }}"
+                >
+                <button 
+                    type="submit" 
+                    class="px-4 py-2 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700 transition-colors"
+                >
+                    🔍
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Статистика -->
+    <div class="mb-6 text-gray-300">
+        <p>Всего актеров: {{ page_obj.paginator.count }}</p>
+    </div>
+
+    <!-- Сетка актеров -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+        {% for actor in actors %}
+        <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+            <a href="{% url 'films:actor_detail' actor.pk %}" class="block">
+                <!-- Фотография актера -->
+                <div class="aspect-w-3 aspect-h-4 bg-gray-700">
+                    {% if actor.photo %}
+                        <img 
+                            src="{{ actor.photo.url }}" 
+                            alt="{{ actor.name }}"
+                            class="w-full h-64 object-cover"
+                        >
+                    {% else %}
+                        <div class="w-full h-64 bg-gray-600 flex items-center justify-center">
+                            <span class="text-gray-400 text-4xl">👤</span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Информация об актере -->
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-white mb-2">{{ actor.name }}</h3>
+                    
+                    <div class="text-sm text-gray-400 space-y-1">
+                        <p>🎂 {{ actor.age }} лет</p>
+                        <p>📍 {{ actor.birth_place|truncatechars:30 }}</p>
+                        <p>🎬 {{ actor.films_count }} фильм{{ actor.films_count|pluralize:"ов" }}</p>
+                    </div>
+                    
+                    <!-- Краткая биография -->
+                    <p class="text-gray-300 text-sm mt-3 line-clamp-3">
+                        {{ actor.biography|truncatewords:20 }}
+                    </p>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center py-12">
+            <p class="text-gray-400 text-lg">Актеры не найдены</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Пагинация -->
+    {% if page_obj.has_other_pages %}
+    <div class="flex justify-center items-center space-x-2">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="px-3 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">Первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">Предыдущая</a>
+        {% endif %}
+
+        <span class="px-3 py-2 bg-blue-600 text-white rounded">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">Следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="px-3 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">Последняя</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+</style>
+{% endblock %}

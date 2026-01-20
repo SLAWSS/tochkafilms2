@@ -1,0 +1,209 @@
+{% extends 'films/base.html' %}
+
+{% block title %}{{ film.title }} - TochkaFilms{% endblock %}
+
+{% block content %}
+<div class="film-detail">
+    <div class="container">
+        <div class="film-header">
+            <div class="film-poster">
+                {% if film.poster %}
+                    <img src="{{ film.poster.url }}" alt="{{ film.title }}">
+                {% endif %}
+            </div>
+            <div class="film-meta">
+                <h1>{{ film.title }}</h1>
+                <p class="film-stats">
+                    {{ film.year }} | {{ film.duration }} мин | 
+                    {% if avg_rating %}⭐ {{ avg_rating|floatformat:1 }}{% else %}⭐ {{ film.rating }}{% endif %}
+                </p>
+                <div class="categories">
+                    {% for category in film.categories.all %}
+                        <span class="category-tag">{{ category.name }}</span>
+                    {% endfor %}
+                </div>
+                <p class="description">{{ film.description }}</p>
+                
+                {% if user.is_authenticated %}
+                <div class="actions">
+                    <a href="{% url 'films:toggle_favorite' film.pk %}" class="btn">
+                        {% if is_favorite %}❤️ Убрать из избранного{% else %}🤍 В избранное{% endif %}
+                    </a>
+                    <a href="{% url 'films:toggle_watchlist' film.pk %}" class="btn">
+                        {% if is_in_watchlist %}✓ В списке{% else %}+ Добавить в список{% endif %}
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if film.trailer_url %}
+        <div class="trailer-section {% if 'kinoafisha.info' in film.trailer_url %}kinoafisha-trailer{% elif 'kino-teatr.ru' in film.trailer_url %}kinoteatr-trailer{% elif 'film.ru' in film.trailer_url %}filmru-trailer{% elif 'kinokrad.co' in film.trailer_url %}kinokrad-trailer{% elif 'hdrezka.ag' in film.trailer_url %}hdrezka-trailer{% elif 'kinopoisk.ru' in film.trailer_url %}kinopoisk-trailer{% elif 'okko.tv' in film.trailer_url %}okko-trailer{% elif 'wink.ru' in film.trailer_url %}wink-trailer{% elif 'start.ru' in film.trailer_url %}start-trailer{% elif 'ivi.ru' in film.trailer_url %}ivi-trailer{% elif 'vk.com' in film.trailer_url %}vk-trailer{% elif 'rutube.ru' in film.trailer_url %}rutube-trailer{% endif %}" id="trailer"></div>
+            <h2 class="gradient-text-red">🇷🇺 Трейлер на русском языке</h2>
+            
+            <div class="trailer-container">
+                <div class="trailer-wrapper" id="trailer-wrapper">
+                    <iframe 
+                        src="{{ film.trailer_url }}" 
+                        title="Трейлер {{ film.title }} на русском"
+                        frameborder="0" 
+                        allowfullscreen
+                        loading="lazy"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        onerror="showTrailerError()">
+                    </iframe>
+                    <div class="trailer-overlay" onclick="playTrailer()">
+                        <div class="play-button">▶</div>
+                        <div class="play-text">Смотреть трейлер</div>
+                    </div>
+                </div>
+                
+                <!-- Альтернативный способ просмотра -->
+                <div class="trailer-alternative" id="trailer-alternative" style="display: none;">
+                    <div class="alternative-content">
+                        <h3>🎬 Трейлер недоступен для встраивания</h3>
+                        <p>Смотрите трейлер на официальной платформе:</p>
+                        <a href="{{ film.trailer_url }}" target="_blank" class="btn btn-primary">
+                            {% if 'kinoafisha.info' in film.trailer_url %}
+                                🎭 Смотреть на КиноАфише
+                            {% elif 'kino-teatr.ru' in film.trailer_url %}
+                                🎪 Смотреть на Кино-Театр.ру
+                            {% elif 'film.ru' in film.trailer_url %}
+                                🎬 Смотреть на Film.ru
+                            {% elif 'kinokrad.co' in film.trailer_url %}
+                                🎯 Смотреть на Кинокрад
+                            {% elif 'hdrezka.ag' in film.trailer_url %}
+                                �  Смотреть на HDRezka
+                            {% elif 'kinopoisk.ru' in film.trailer_url %}
+                                � ССмотреть на КиноПоиск HD
+                            {% elif 'okko.tv' in film.trailer_url %}
+                                � ССмотреть на Okko
+                            {% elif 'wink.ru' in film.trailer_url %}
+                                � ССмотреть на Wink
+                            {% elif 'start.ru' in film.trailer_url %}
+                                🟣 Смотреть на START
+                            {% elif 'ivi.ru' in film.trailer_url %}
+                                🔴 Смотреть на ivi
+                            {% elif 'vk.com' in film.trailer_url %}
+                                📺 Смотреть на VK Video
+                            {% elif 'rutube.ru' in film.trailer_url %}
+                                📺 Смотреть на Rutube
+                            {% else %}
+                                📺 Смотреть трейлер
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="trailer-info">
+                <div class="platform-badge">
+                    {% if 'kinoafisha.info' in film.trailer_url %}
+                        <span class="kinoafisha-badge">🎭 КиноАфиша</span>
+                    {% elif 'kino-teatr.ru' in film.trailer_url %}
+                        <span class="kinoteatr-badge">🎪 Кино-Театр.ру</span>
+                    {% elif 'film.ru' in film.trailer_url %}
+                        <span class="filmru-badge">🎬 Film.ru</span>
+                    {% elif 'kinokrad.co' in film.trailer_url %}
+                        <span class="kinokrad-badge">🎯 Кинокрад</span>
+                    {% elif 'hdrezka.ag' in film.trailer_url %}
+                        <span class="hdrezka-badge">📺 HDRezka</span>
+                    {% elif 'kinopoisk.ru' in film.trailer_url %}
+                        <span class="kinopoisk-badge">🟡 КиноПоиск HD</span>
+                    {% elif 'okko.tv' in film.trailer_url %}
+                        <span class="okko-badge">� Okko</span>p
+                    {% elif 'wink.ru' in film.trailer_url %}
+                        <span class="wink-badge">� WВink</span>
+                    {% elif 'start.ru' in film.trailer_url %}
+                        <span class="start-badge">🟣 START</span>
+                    {% elif 'ivi.ru' in film.trailer_url %}
+                        <span class="ivi-badge">🔴 ivi</span>
+                    {% elif 'vk.com' in film.trailer_url %}
+                        <span class="vk-badge">📺 VK Video</span>
+                    {% elif 'rutube.ru' in film.trailer_url %}
+                        <span class="rutube-badge">📺 Rutube</span>
+                    {% else %}
+                        <span class="video-badge">📺 Видео</span>
+                    {% endif %}
+                    <span class="russian-flag">🇷🇺 Русская озвучка</span>
+                </div>
+                <p class="trailer-description">
+                    Официальный трейлер фильма "{{ film.title }}" с русской озвучкой. 
+                    Качество HD, без рекламы.
+                </p>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="reviews-section">
+            <h2>Отзывы</h2>
+            
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'films:add_review' film.pk %}" class="review-form">
+                {% csrf_token %}
+                <label>Оценка:</label>
+                <select name="rating" required>
+                    {% for i in "12345678910" %}
+                        <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                    {% endfor %}
+                </select>
+                <textarea name="comment" placeholder="Ваш отзыв (необязательно)"></textarea>
+                <button type="submit" class="btn">Отправить отзыв</button>
+            </form>
+            {% endif %}
+
+            <div class="reviews-list">
+                {% for review in reviews %}
+                <div class="review">
+                    <div class="review-header">
+                        <strong>{{ review.user.username }}</strong>
+                        <span class="rating">⭐ {{ review.rating }}/10</span>
+                    </div>
+                    {% if review.comment %}
+                        <p>{{ review.comment }}</p>
+                    {% endif %}
+                    <small>{{ review.created_at|date:"d.m.Y H:i" }}</small>
+                </div>
+                {% empty %}
+                <p>Пока нет отзывов. Будьте первым!</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% if similar_films %}
+        <div class="similar-films">
+            <h2>🎬 Похожие фильмы</h2>
+            <div class="film-grid">
+                {% for film in similar_films %}
+                <div class="film-card">
+                    {% if film.trailer_url %}
+                        <a href="{% url 'films:film_detail' film.pk %}#trailer" class="trailer-btn">Трейлер 🇷🇺</a>
+                        {% if 'vk.com' in film.trailer_url %}
+                            <div class="russian-badge vk-badge">VK</div>
+                        {% elif 'rutube.ru' in film.trailer_url %}
+                            <div class="russian-badge rutube-badge">RuTube</div>
+                        {% endif %}
+                    {% endif %}
+                    <a href="{% url 'films:film_detail' film.pk %}">
+                        {% if film.poster %}
+                            <img src="{{ film.poster.url }}" alt="{{ film.title }}">
+                            {% if film.trailer_url %}
+                                <div class="play-overlay"></div>
+                            {% endif %}
+                        {% else %}
+                            <div class="no-poster">{{ film.title }}</div>
+                        {% endif %}
+                        <div class="film-info">
+                            <h3>{{ film.title }}</h3>
+                            <p>{{ film.year }} | <span class="rating-stars">⭐ {{ film.rating }}</span></p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

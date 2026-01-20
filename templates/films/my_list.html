@@ -1,0 +1,75 @@
+{% extends 'films/base.html' %}
+
+{% block title %}Мой список - TochkaFilms{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Мой список</h1>
+    
+    <section>
+        <h2>Избранное</h2>
+        <div class="film-grid">
+            {% for film in favorites %}
+            <div class="film-card">
+                {% if film.trailer_url %}
+                    {% if 'vk.com' in film.trailer_url %}
+                        <div class="russian-badge vk-badge">VK</div>
+                    {% elif 'rutube.ru' in film.trailer_url %}
+                        <div class="russian-badge rutube-badge">RuTube</div>
+                    {% endif %}
+                {% endif %}
+                <a href="{% url 'films:film_detail' film.pk %}">
+                    {% if film.poster %}
+                        <img src="{{ film.poster.url }}" alt="{{ film.title }}">
+                        {% if film.trailer_url %}
+                            <div class="play-overlay"></div>
+                        {% endif %}
+                    {% else %}
+                        <div class="no-poster">{{ film.title }}</div>
+                    {% endif %}
+                    <div class="film-info">
+                        <h3>{{ film.title }}</h3>
+                        <p>{{ film.year }} | <span class="rating-stars">⭐ {{ film.rating }}</span></p>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <p>У вас пока нет избранных фильмов.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section>
+        <h2>Список просмотра</h2>
+        <div class="film-grid">
+            {% for film in watchlist %}
+            <div class="film-card">
+                {% if film.trailer_url %}
+                    {% if 'vk.com' in film.trailer_url %}
+                        <div class="russian-badge vk-badge">VK</div>
+                    {% elif 'rutube.ru' in film.trailer_url %}
+                        <div class="russian-badge rutube-badge">RuTube</div>
+                    {% endif %}
+                {% endif %}
+                <a href="{% url 'films:film_detail' film.pk %}">
+                    {% if film.poster %}
+                        <img src="{{ film.poster.url }}" alt="{{ film.title }}">
+                        {% if film.trailer_url %}
+                            <div class="play-overlay"></div>
+                        {% endif %}
+                    {% else %}
+                        <div class="no-poster">{{ film.title }}</div>
+                    {% endif %}
+                    <div class="film-info">
+                        <h3>{{ film.title }}</h3>
+                        <p>{{ film.year }} | <span class="rating-stars">⭐ {{ film.rating }}</span></p>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <p>Ваш список просмотра пуст.</p>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

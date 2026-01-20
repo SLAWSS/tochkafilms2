@@ -1,0 +1,111 @@
+{% extends 'films/base.html' %}
+{% load static %}
+
+{% block title %}Фильтр фильмов - TochkaFilms{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>🔍 Фильтр фильмов</h1>
+    
+    <div class="filter-form">
+        <form method="get" class="filters">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>Год от:</label>
+                    <input type="number" name="year_from" value="{{ current_filters.year_from }}" min="1900" max="2030" placeholder="1990">
+                </div>
+                <div class="filter-group">
+                    <label>Год до:</label>
+                    <input type="number" name="year_to" value="{{ current_filters.year_to }}" min="1900" max="2030" placeholder="2024">
+                </div>
+                <div class="filter-group">
+                    <label>Рейтинг от:</label>
+                    <input type="number" name="rating_from" value="{{ current_filters.rating_from }}" min="0" max="10" step="0.1" placeholder="7.0">
+                </div>
+            </div>
+            
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>Категория:</label>
+                    <select name="category">
+                        <option value="">Все категории</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}" {% if current_filters.category == category.id|stringformat:"s" %}selected{% endif %}>
+                                {{ category.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Сортировка:</label>
+                    <select name="sort">
+                        <option value="-rating" {% if current_filters.sort == "-rating" %}selected{% endif %}>По рейтингу ↓</option>
+                        <option value="rating" {% if current_filters.sort == "rating" %}selected{% endif %}>По рейтингу ↑</option>
+                        <option value="-year" {% if current_filters.sort == "-year" %}selected{% endif %}>По году ↓</option>
+                        <option value="year" {% if current_filters.sort == "year" %}selected{% endif %}>По году ↑</option>
+                        <option value="title" {% if current_filters.sort == "title" %}selected{% endif %}>По названию ↑</option>
+                        <option value="-title" {% if current_filters.sort == "-title" %}selected{% endif %}>По названию ↓</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button type="submit" class="btn">Применить</button>
+                    <a href="{% url 'films:films_filter' %}" class="btn btn-secondary">Сбросить</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="results-info">
+        <p>Найдено фильмов: {{ page_obj.paginator.count }}</p>
+    </div>
+
+    <div class="film-grid">
+        {% for film in page_obj %}
+        <div class="film-card">
+            {% if film.trailer_url %}
+                {% if 'vk.com' in film.trailer_url %}
+                    <div class="russian-badge vk-badge">VK</div>
+                {% elif 'rutube.ru' in film.trailer_url %}
+                    <div class="russian-badge rutube-badge">RuTube</div>
+                {% endif %}
+            {% endif %}
+            <a href="{% url 'films:film_detail' film.pk %}">
+                {% if film.poster %}
+                    <img src="{{ film.poster.url }}" alt="{{ film.title }}">
+                    {% if film.trailer_url %}
+                        <div class="play-overlay"></div>
+                    {% endif %}
+                {% else %}
+                    <div class="no-poster">{{ film.title }}</div>
+                {% endif %}
+                <div class="film-info">
+                    <h3>{{ film.title }}</h3>
+                    <p>{{ film.year }} | <span class="rating-stars">⭐ {{ film.rating }}</span></p>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <p>По заданным фильтрам ничего не найдено.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Пагинация -->
+    {% if page_obj.has_other_pages %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1{% for key, value in current_filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">&laquo; Первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% for key, value in current_filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Предыдущая</a>
+        {% endif %}
+        
+        <span class="current-page">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+        
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% for key, value in current_filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% for key, value in current_filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Последняя &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

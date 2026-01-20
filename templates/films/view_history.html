@@ -1,0 +1,84 @@
+{% extends 'films/base.html' %}
+{% load static %}
+
+{% block title %}История просмотров - TochkaFilms{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>📺 История просмотров</h1>
+        <div class="header-actions">
+            <form method="post" action="{% url 'films:clear_history' %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary" onclick="return confirm('Вы уверены, что хотите очистить всю историю?')">
+                    🗑️ Очистить историю
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {% if page_obj %}
+        <div class="results-info">
+            <p>Всего просмотрено: {{ page_obj.paginator.count }} фильмов</p>
+        </div>
+
+        <div class="history-list">
+            {% for history_item in page_obj %}
+            <div class="history-item">
+                <div class="history-poster">
+                    {% if history_item.film.poster %}
+                        <img src="{{ history_item.film.poster.url }}" alt="{{ history_item.film.title }}">
+                    {% endif %}
+                </div>
+                <div class="history-info">
+                    <h3>
+                        <a href="{% url 'films:film_detail' history_item.film.pk %}">{{ history_item.film.title }}</a>
+                    </h3>
+                    <p>{{ history_item.film.year }} | <span class="rating-stars">⭐ {{ history_item.film.rating }}</span></p>
+                    <p class="history-description">{{ history_item.film.description|truncatewords:20 }}</p>
+                    <div class="history-date">
+                        Просмотрено: {{ history_item.viewed_at|date:"d.m.Y H:i" }}
+                    </div>
+                </div>
+                <div class="history-actions">
+                    {% if history_item.film.trailer_url %}
+                        <a href="{% url 'films:film_detail' history_item.film.pk %}#trailer" class="btn btn-small">
+                            Трейлер 🇷🇺
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'films:film_detail' history_item.film.pk %}" class="btn btn-small">
+                        Подробнее
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Пагинация -->
+        {% if page_obj.has_other_pages %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; Первая</a>
+                <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+            {% endif %}
+            
+            <span class="current-page">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            </span>
+            
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">📺</div>
+            <h2>История пуста</h2>
+            <p>Вы еще не просматривали фильмы. Начните с <a href="{% url 'films:home' %}">главной страницы</a>!</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

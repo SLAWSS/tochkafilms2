@@ -1,0 +1,119 @@
+{% extends 'films/base.html' %}
+{% load static %}
+
+{% block title %}Поиск актеров - TochkaFilms{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Навигация -->
+    <nav class="mb-6">
+        <a href="{% url 'films:actors_list' %}" class="text-blue-400 hover:text-blue-300">← Все актеры</a>
+    </nav>
+
+    <!-- Поиск -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-white mb-4">Поиск актеров</h1>
+        
+        <form method="GET" class="flex max-w-md">
+            <input 
+                type="text" 
+                name="q" 
+                placeholder="Введите имя актера..." 
+                class="flex-1 px-4 py-3 bg-gray-800 text-white rounded-l-lg border border-gray-600 focus:outline-none focus:border-blue-500"
+                value="{{ query }}"
+                autofocus
+            >
+            <button 
+                type="submit" 
+                class="px-6 py-3 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700 transition-colors"
+            >
+                Найти
+            </button>
+        </form>
+    </div>
+
+    <!-- Результаты поиска -->
+    {% if query %}
+    <div class="mb-6">
+        <h2 class="text-xl text-white mb-2">
+            Результаты поиска по запросу: <span class="text-blue-400">"{{ query }}"</span>
+        </h2>
+        <p class="text-gray-400">Найдено: {{ actors_count }} актер{{ actors_count|pluralize:"ов" }}</p>
+    </div>
+
+    {% if actors %}
+    <!-- Сетка актеров -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {% for actor in actors %}
+        <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+            <a href="{% url 'films:actor_detail' actor.pk %}" class="block">
+                <!-- Фотография актера -->
+                <div class="aspect-w-3 aspect-h-4 bg-gray-700">
+                    {% if actor.photo %}
+                        <img 
+                            src="{{ actor.photo.url }}" 
+                            alt="{{ actor.name }}"
+                            class="w-full h-64 object-cover"
+                        >
+                    {% else %}
+                        <div class="w-full h-64 bg-gray-600 flex items-center justify-center">
+                            <span class="text-gray-400 text-4xl">👤</span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Информация об актере -->
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-white mb-2">{{ actor.name }}</h3>
+                    
+                    <div class="text-sm text-gray-400 space-y-1">
+                        <p>🎂 {{ actor.age }} лет</p>
+                        <p>📍 {{ actor.birth_place|truncatechars:30 }}</p>
+                        <p>🎬 {{ actor.films_count }} фильм{{ actor.films_count|pluralize:"ов" }}</p>
+                    </div>
+                    
+                    <!-- Краткая биография -->
+                    <p class="text-gray-300 text-sm mt-3 line-clamp-3">
+                        {{ actor.biography|truncatewords:15 }}
+                    </p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Нет результатов -->
+    <div class="text-center py-12">
+        <div class="text-6xl text-gray-600 mb-4">🔍</div>
+        <h3 class="text-xl text-white mb-2">Актеры не найдены</h3>
+        <p class="text-gray-400 mb-6">Попробуйте изменить поисковый запрос</p>
+        
+        <div class="text-left max-w-md mx-auto text-gray-400 text-sm">
+            <p class="mb-2">Советы для поиска:</p>
+            <ul class="list-disc list-inside space-y-1">
+                <li>Проверьте правильность написания</li>
+                <li>Попробуйте использовать только имя или фамилию</li>
+                <li>Используйте более общие термины</li>
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+    {% else %}
+    <!-- Начальное состояние -->
+    <div class="text-center py-12">
+        <div class="text-6xl text-gray-600 mb-4">🎭</div>
+        <h3 class="text-xl text-white mb-2">Поиск актеров</h3>
+        <p class="text-gray-400">Введите имя актера в поле поиска выше</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+</style>
+{% endblock %}
